@@ -14,7 +14,7 @@ RSpec.describe JsonDumper::Helper do
     human = Human.new(name: 'Dmitry', arms: 2, legs: 1, car: car)
     expect(fake_preloader).to receive(:preload).with(human, car: [] )
     human_delayed = HumanDumper.fetch_preview_with_car_and_params(human)
-    expect(dumper.dump_json(human: human_delayed)).to eq(
+    expect(dumper.dumper_json(human: human_delayed)).to eq(
       human: {
         name: 'Dmitry',
         legs: 1,

@@ -1,10 +1,10 @@
 module JsonDumper
   module Helper
     def render_dumper_json(hash)
-      render json: dump_json(hash)
+      render json: dumper_json(hash)
     end
 
-    def dump_json(hash)
+    def dumper_json(hash)
       result = hash.map do |k, v|
         if v.is_a?(JsonDumper::Delayed)
           [k, dumper_fetch(v, camelcase: false)]

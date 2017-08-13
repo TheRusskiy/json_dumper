@@ -17,6 +17,13 @@ class HumanDumper < JsonDumper::Base
     }
   end
 
+  def preview_with_params(extra_param1:, extra_param2:)
+    preview.merge(
+      param1: extra_param1,
+      param2: extra_param2
+    )
+  end
+
   def preview_with_car
     preview.merge(
        car: CarDumper.preview(car)

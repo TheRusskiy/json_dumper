@@ -8,7 +8,7 @@ module JsonDumper
     end
 
     def camel
-      keys_to_camelcase
+      JsonDumper::KeyTransformer.keys_to_camelcase(self)
     end
   end
 end

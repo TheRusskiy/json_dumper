@@ -29,4 +29,16 @@ class HumanDumper < JsonDumper::Base
        car: CarDumper.preview(car)
     )
   end
+
+  def preview_with_car_preload
+    { car: [] }
+  end
+
+  def preview_with_car_and_params
+    preview_with_car.merge(some_param: 'some_value')
+  end
+
+  def preview_with_car_and_params_preload
+    preview_with_car_preload
+  end
 end

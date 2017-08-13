@@ -12,7 +12,7 @@ module JsonDumper
       name = name.to_s
       value = args[0]
       if name.start_with?('fetch_')
-        return DumperDelayed.new(name.gsub('fetch_', ''), value, args[1..-1], self)
+        return Delayed.new(name.gsub('fetch_', ''), value, args[1..-1], self)
       end
       if instance.respond_to?(name)
         if value.respond_to?(:each) && !value.respond_to?(:each_pair)
@@ -63,30 +63,6 @@ module JsonDumper
 
     def self.instance
       @instance ||= new
-    end
-
-    class DumperHash < Hash
-      attr_accessor :preload
-      def initialize(hash)
-        hash.each_pair do |k, v|
-          self[k] = v
-        end
-      end
-
-      def camel
-        keys_to_camelcase
-      end
-    end
-
-    class DumperDelayed
-      attr_accessor :method_name, :entity, :args, :klass
-
-      def initialize(method_name, entity, args, klass)
-        self.method_name = method_name
-        self.entity = entity
-        self.args = args
-        self.klass = klass
-      end
     end
   end
 end

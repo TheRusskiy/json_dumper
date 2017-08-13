@@ -38,7 +38,7 @@ module JsonDumper
           result.preload = instance.respond_to?(preload_method_name) ? instance.send(preload_method_name) : {}
           result
         end
-      elsif name.end_with?('_preload')
+      elsif name.end_with?('_preload') && instance.respond_to?(name.gsub('_preload', ''))
         return {}
       else
         super name_sym, *args, &block

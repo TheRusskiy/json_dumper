@@ -68,4 +68,20 @@ RSpec.describe JsonDumper::Base do
       param2: 'some other value'
     )
   end
+
+  describe "preloading" do
+    it "can get hashes" do
+      preload = HumanDumper.preview_preload
+      expect(preload).to eq({})
+    end
+
+    it "can get empty hashes for methods without preload defined" do
+      preload = HumanDumper.preview_with_car_preload
+      expect(preload).to eq(car: [])
+    end
+
+    it "raises errors on non existing methods" do
+      expect { HumanDumper.blabla_preload }.to raise_error NoMethodError
+    end
+  end
 end

@@ -1,9 +1,10 @@
 class Human
-  attr_accessor :name, :legs, :arms
-  def initialize(name:, legs:, arms:)
+  attr_accessor :name, :legs, :arms, :car
+  def initialize(name:, legs:, arms:, car: nil)
     self.name = name
     self.legs = legs
     self.arms = arms
+    self.car = car
   end
 end
 
@@ -14,5 +15,11 @@ class HumanDumper < JsonDumper::Base
       legs: legs,
       arms: arms
     }
+  end
+
+  def preview_with_car
+    preview.merge(
+       car: CarDumper.preview(car)
+    )
   end
 end

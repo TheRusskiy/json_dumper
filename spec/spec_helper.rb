@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "json_dumper"
 require_relative 'fixtures/human'
+require_relative 'fixtures/car'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

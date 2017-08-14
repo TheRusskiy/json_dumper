@@ -1,6 +1,7 @@
 module JsonDumper
   class KeyTransformer
     def self.keys_to_camelcase(obj)
+      return nil if obj.nil?
       if array_like?(obj)
         return keys_to_camelcase_array(obj)
       end

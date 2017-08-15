@@ -21,7 +21,12 @@ module JsonDumper
             if new_dumper.return_nils
               return nil
             end
-            result = DumperHash.new(new_dumper.send(name, *(args[1..-1]), &block))
+            result = new_dumper.send(name, *(args[1..-1]), &block)
+            if result.respond_to?(:each) && !result.respond_to?(:each_pair)
+              result = DumperArray.new(result)
+            else
+              result = DumperHash.new(result)
+            end
             preload_method_name = "#{name}_preload"
             result.preload = instance.respond_to?(preload_method_name) ? instance.send(preload_method_name) : {}
             result
@@ -33,7 +38,13 @@ module JsonDumper
           if new_dumper.return_nils
             return nil
           end
-          result = DumperHash.new(new_dumper.send(name, *(args[1..-1]), &block))
+          result = new_dumper.send(name, *(args[1..-1]), &block)
+          if result.respond_to?(:each) && !result.respond_to?(:each_pair)
+            result = DumperArray.new(result)
+          else
+            result = DumperHash.new(result)
+          end
+
           preload_method_name = "#{name}_preload"
           result.preload = instance.respond_to?(preload_method_name) ? instance.send(preload_method_name) : {}
           result

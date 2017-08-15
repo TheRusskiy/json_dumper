@@ -22,6 +22,23 @@ RSpec.describe JsonDumper::Base do
     )
   end
 
+  it "works correctly if returns an array" do
+    child1 = Child.new(first_name: 'Nikita', age: 10)
+    child2 = Child.new(first_name: 'Natasha', age: 12)
+    human = Human.new(name: 'Dmitry', arms: 2, legs: 1, children: [child1, child2])
+    json = HumanDumper.children(human)
+    expect(json).to eq([
+      {
+        first_name: 'Nikita',
+        age: 10,
+      },
+      {
+        first_name: 'Natasha',
+        age: 12
+      }
+    ])
+  end
+
   it "can return nil for nested" do
     human = Human.new(name: 'Dmitry', arms: 2, legs: 1)
     json = HumanDumper.preview_with_car(human)

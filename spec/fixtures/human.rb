@@ -1,10 +1,11 @@
 class Human
-  attr_accessor :name, :legs, :arms, :car
-  def initialize(name:, legs:, arms:, car: nil)
+  attr_accessor :name, :legs, :arms, :car, :children
+  def initialize(name:, legs:, arms:, car: nil, children: [])
     self.name = name
     self.legs = legs
     self.arms = arms
     self.car = car
+    self.children = children
   end
 end
 
@@ -40,5 +41,9 @@ class HumanDumper < JsonDumper::Base
 
   def preview_with_car_and_params_preload
     preview_with_car_preload
+  end
+
+  def children
+    ChildDumper.preview(entity.children)
   end
 end

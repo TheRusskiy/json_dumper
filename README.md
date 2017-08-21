@@ -206,3 +206,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/therus
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
+## Related blogpost
+
+Check it out [here](http://www.dmitry-ishkov.com/2017/08/better-ruby-serialization-into-json.html)
+

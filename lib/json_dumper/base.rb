@@ -7,12 +7,12 @@ module JsonDumper
       self.entity = entity
     end
 
-    def self.method_missing(name, *args, &block)
+    def self.method_missing(name, *args1, **args2, &block)
       name_sym = name
       name = name.to_s
-      value = args[0]
+      value = args1[0]
       if name.start_with?('fetch_')
-        return Delayed.new(name.gsub('fetch_', ''), value, args[1..-1], self)
+        return Delayed.new(name.gsub('fetch_', ''), value, args1[1..-1], args2, self)
       end
       if instance.respond_to?(name)
         if value.respond_to?(:each) && !value.respond_to?(:each_pair)
@@ -21,7 +21,11 @@ module JsonDumper
             if new_dumper.return_nils
               return nil
             end
-            result = new_dumper.send(name, *(args[1..-1]), &block)
+            result = if args2.empty?
+                       new_dumper.send(name, *(args1[1..-1]), &block)
+                     else
+                       new_dumper.send(name, *(args1[1..-1]), **args2, &block)
+                     end
             if result.respond_to?(:each) && !result.respond_to?(:each_pair)
               result = DumperArray.new(result)
             else
@@ -38,7 +42,11 @@ module JsonDumper
           if new_dumper.return_nils
             return nil
           end
-          result = new_dumper.send(name, *(args[1..-1]), &block)
+          result = if args2.empty?
+                     new_dumper.send(name, *(args1[1..-1]), &block)
+                   else
+                     new_dumper.send(name, *(args1[1..-1]), **args2, &block)
+                   end
           if result.respond_to?(:each) && !result.respond_to?(:each_pair)
             result = DumperArray.new(result)
           else
@@ -52,7 +60,11 @@ module JsonDumper
       elsif name.end_with?('_preload') && instance.respond_to?(name.gsub('_preload', ''))
         return {}
       else
-        super name_sym, *args, &block
+        if args2.empty?
+          super name_sym, *args1, &block
+        else
+          super name_sym, *args1, *args2, &block
+        end
       end
     end
 
@@ -60,11 +72,15 @@ module JsonDumper
       new.respond_to? method_name
     end
 
-    def method_missing(name, *args, &block)
+    def method_missing(name, *args1, **args2, &block)
       if entity.respond_to? name
-        entity.send(name, *args, &block)
+        if args2.empty?
+          entity.send(name, *args1, &block)
+        else
+          entity.send(name, *args1, **args2, &block)
+        end
       else
-        super name, *args, &block
+        super
       end
     end
 

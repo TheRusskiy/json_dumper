@@ -18,7 +18,11 @@ module JsonDumper
     def dumper_fetch(delayed, camelcase: true)
       preload_hash = delayed.klass.send("#{delayed.method_name}_preload")
       preloader.preload(delayed.entity,preload_hash)
-      result = delayed.klass.send(delayed.method_name, delayed.entity, *delayed.args)
+      result = if delayed.named_args.empty?
+                 delayed.klass.send(delayed.method_name, delayed.entity, *delayed.positional_args)
+               else
+                 delayed.klass.send(delayed.method_name, delayed.entity, *delayed.positional_args, **delayed.named_args)
+               end
       if camelcase
         result = KeyTransformer.keys_to_camelcase(result)
       end
